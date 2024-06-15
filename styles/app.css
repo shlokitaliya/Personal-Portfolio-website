@@ -1,0 +1,199 @@
+/* nav bar css with responsive media queries */
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    /* justify-content: space-between; */
+    align-items: center;
+    font-size: 1rem;
+    height: 15lvh;
+    overflow: hidden;
+    /* border: 1px solid red; */
+    margin: 1vw;
+}
+
+.header-part-1 {
+    /* border: 1px solid blue; */
+    margin: 10px;
+}
+
+.header-part-2 {
+    /* border: 1px solid rgb(0, 152, 73); */
+    margin: 10px;
+    display: flex;
+    /* width: 100px; */
+    align-items: center;
+    padding: 10px 15px;
+    justify-content: space-between;
+}
+
+.name {
+    font-size: 28px;
+    color: rgb(63, 63, 63);
+    margin-left: 5vw;
+}
+
+.project-link {
+    margin-right: 10px;
+    font-size: 1rem;
+}
+
+.contact-button {
+    border-radius: 25px;
+    padding: 13px 15px;
+    margin: 5px;
+    margin-right: 30px;
+    font-size: 1rem;
+    background-color: #F3F3F3;
+    border: 1px solid black;
+    overflow: hidden;
+    position: relative;
+    z-index: 5;
+}
+.contact-button:hover{
+    color: white;
+}
+.contact-button::before{
+    position: absolute;
+    transition: 0.5s all ease;
+    top: 100%;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    opacity: 0;
+    content: "";
+    background-color: black;
+}
+.contact-button:hover::before{
+    transition: 0.5s all ease;
+    top: 0;
+    opacity: 1;
+    z-index: -1;
+}
+@media (max-width:1600px) {
+    .name{
+        font-size: 28px;
+    }
+    .project-link{
+        font-size: 1rem;
+    }
+    .contact-button{
+        font-size: 1rem;
+    }
+}
+@media (max-width:900px) {
+    .name{
+        font-size: 26px;
+    }
+    .project-link{
+        font-size: 0.9rem;
+    }
+    .contact-button{
+        font-size: 0.9rem;
+    }
+}
+@media (max-width:600px) {
+    .name{
+        font-size: 18px;
+        margin-left: 2vw;
+    }
+    .project-link{
+        font-size: 0.8rem;
+    }
+    .contact-button{
+        font-size: 0.8rem;
+        margin: 0;
+        margin-right: 1vw;
+    }
+    .header-part-2{
+        margin-right: 0;
+        padding-right: 0;
+    }
+
+}
+@media (max-width:400px) {
+    .name{
+        font-size: 14px;
+        margin-left: 2vw;
+    }
+    .project-link{
+        font-size: 0.7rem;
+    }
+    .contact-button{
+        font-size: 0.7rem;
+        margin: 0;
+        margin-right: 1vw;
+    }
+    .header-part-2{
+        margin-right: 0;
+        padding-right: 0;
+    }
+
+}
+
+
+/* front page css */
+
+.front-page{
+    /* border: 1px solid red; */
+    margin: 10vh 5vw;
+    padding: 5px;
+    overflow: hidden;
+    /* height: calc(85lvh - 55px) */
+}
+.front-title{
+    padding-top: 15lvh;
+    font-size: 6rem;
+    font-weight: 600;
+    position: relative;
+  
+}
+
+
+.front-page-description{
+    font-size: 1.5rem;
+    max-width: 35lvw;
+    min-width: 35lvw;
+    padding-left: 10px;
+    line-height: 25px;
+    letter-spacing: 1px;
+    word-spacing: 4px;
+}
+@media (max-width:1200px) {
+    .front-title{
+        font-size: 5rem;
+    }
+    .front-page-description{
+        max-width: 40lvw;
+    min-width: 40lvw;
+    }
+}
+@media (max-width:900px) {
+    .front-title{
+        font-size: 4rem;
+    }
+    .front-page-description{
+        max-width: 50lvw;
+    min-width: 50lvw;
+    }
+}
+@media (max-width:600px) {
+    .front-title{
+        font-size: 1.6rem;
+    }
+    .front-page-description{
+        max-width: 70lvw;
+    min-width: 70lvw;
+    font-size: 0.6rem;
+    padding-left: 0;
+    word-spacing: 0px;
+    }
+    .front-page{
+        /* border: 1px solid red; */
+        margin: 2vh 2vw;
+        padding: 5px;
+        /* height: calc(85lvh - 55px) */
+    }
+    
+}
+/* front page css complete */
+

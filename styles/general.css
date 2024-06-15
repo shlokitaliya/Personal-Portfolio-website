@@ -1,0 +1,23 @@
+html{
+    scroll-behavior: smooth;
+}
+body{
+    margin: 0;
+    padding: 0;
+    /* height: 1000px; */
+    background-color: #F3F3F3;
+    color: rgb(17, 17, 17);
+    font-size: 1.2rem;
+    font-family: Montserrat;
+}
+.general-link{
+    text-decoration: none;
+    color: black;
+}
+.spacer{
+    height: 30vh;
+}
+button{
+    cursor: pointer;
+    outline: none;
+}

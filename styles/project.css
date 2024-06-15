@@ -1,0 +1,268 @@
+.project-line{
+    margin: 0 6vw;
+}
+.project-title-heading{
+    margin-left: 5vw;
+    /* font-size: 1rem; */
+
+}
+
+.main-container{
+    /* border: 1px solid black; */
+    padding: 5vh 6vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2vw;
+    row-gap: 8vh;
+}
+.project-container{
+    /* border: 2px solid rgb(255, 107, 132); */
+    display: grid;
+    grid-template-rows: 8.5fr 1.5fr;
+    height: 90vh;
+    /* column-gap: 1000px; */
+    /* object-fit: scale-down; */
+}
+.project-overview{
+    /* border: 2px solid rgb(74, 0, 74); */
+
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* grid-template-columns: 1fr 1fr; */
+    position: relative;
+}
+.image-link{
+    /* display: grid;
+    place-content: center; */
+  object-fit: cover;
+}
+.image-overview{
+    /* border: 4px solid green; */
+    width: 100%;
+    height: 100%;
+}
+.project-name-and-type{
+    /* border: 1px solid darkgoldenrod; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+
+.overflow{
+    /* display: block; */
+    position: absolute;
+    display: grid;
+    grid-template-rows: 1fr 3fr 1fr;
+    padding: 3vh 4vw;
+    background-color: rgba(255, 255, 255, 0.981);
+    color: rgb(0, 0, 0);
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    /* opacity: 0; */
+    transform: translateX(100%);
+    transition: ease-in-out all 0.8s;
+}
+.project-overview:hover .overflow{
+    /* opacity: 1; */
+    transform: translateX(0);
+}
+
+/* the css of the description of project which ocurrs when we hover over the projects */
+.project-title{
+    text-align: left;
+    padding: 0;
+    margin-left: 0;
+    margin-top: 5px;
+    font-size: 2rem;
+    font-weight: 600;
+}
+.project-description{
+ font-size: 1rem;
+ overflow: hidden;
+}
+.language-buttons{
+    border-radius: 20px;
+    /* border: 0.5px solid rgba(0, 0, 0, 0.432); */
+    border: none;
+    background-color: rgb(233 233 233);
+    padding: 1vh 1vw;
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
+    transition: ease all 0.3s;
+}
+.language-buttons:hover{
+    /* color: black; */
+    background-color: black;
+}
+.HTML{
+    background-color: #E44D26;
+}
+.CSS{
+    background-color: #167DBE;
+}
+.javascript{
+    background-color: #F7E018;
+}
+.python{
+    background-color: #446785;
+}
+.JAVA{
+    background-color: #5582A1;
+}
+.C,
+.Cplusplus{
+    background-color: #659BD3;
+}
+
+
+
+/* this css of the heading and type of project which is there at the end on every project */
+
+.project-name{
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+.project-type{
+    font-size: 1.5rem;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 500;
+}
+
+
+
+
+
+@media (max-width:2000px){
+    .project-container{
+        height: 80vh;
+    }  
+}
+@media (max-width:1800px){
+    .project-container{
+        height: 70vh;
+    }  
+} 
+
+@media (max-width:1600px){
+    .project-container{
+        height: 65vh;
+    }  
+}
+@media (max-width:1400px){
+    .project-container{
+        height: 60vh;
+    }  
+}
+@media (max-width:1300px){
+    .project-container{
+        height: 50vh;
+    }  
+}
+@media (max-width:1200px){
+    .project-container{
+        height: 45vh;
+    }  
+    .project-description{
+        font-size: 0.8rem;
+    }
+    
+}
+
+@media (max-width:1000px){
+    .main-container{
+        grid-template-columns: 1fr;
+        padding: 5vh 20vw;
+    }  
+    .project-container{
+        height: 60vh;
+    }
+}
+@media (max-width:900px){
+    .main-container{
+        grid-template-columns: 1fr;
+        padding: 5vh 16vw;
+    }  
+    .project-container{
+        height: 60vh;
+    }
+   
+}
+@media (max-width:800px){
+    .main-container{
+        grid-template-columns: 1fr;
+        padding: 5vh 14vw;
+    }  
+    .project-container{
+        height: 60vh;
+    }
+    .project-name{
+        font-size: 1rem;
+    }
+    .project-type{
+        font-size: 1rem;
+    }
+  
+}
+@media (max-width:600px){
+    .main-container{
+        grid-template-columns: 1fr;
+        padding: 5vh 12vw;
+    }  
+    .project-container{
+        height: 35vh;
+    }
+    .project-name{
+        font-size: 0.8rem;
+    }
+    .project-type{
+        font-size: 0.8rem;
+    }
+    .project-title-heading{
+        margin-left: 0vw;
+        font-size: 0.9rem;
+        padding-left: 8vw;
+    }
+    .project-description{
+        font-size: 0.6rem;
+    }
+    .language-buttons{
+        font-size: 0.6rem;
+    }
+}
+@media (max-width:400px){
+    .main-container{
+        grid-template-columns: 1fr;
+        padding: 5vh 10vw;
+    }  
+    .project-container{
+        height: 35vh;
+    }
+    .project-name{
+        font-size: 0.8rem;
+    }
+    .project-type{
+        font-size: 0.8rem;
+    }
+    .project-title-heading{
+        margin-left: 0vw;
+        font-size: 0.9rem;
+        padding-left: 8vw;
+    }
+}
+
+
+
+
+
+
+
+
+
