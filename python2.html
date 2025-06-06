@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Python Learning Pathway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Harmony -->
+    <!-- Application Structure Plan: The SPA is designed as an interactive "Learning Pathway." A fixed sidebar navigation represents the main curriculum chapters (Intro, Fundamentals, etc.), providing a clear roadmap. Clicking a chapter updates the main content area, which displays sub-topics (like Variables, Operators) as interactive, expandable cards. This layered, drill-down structure prevents overwhelming the learner by allowing them to control the depth of information. The user flow is from a high-level overview to specific, digestible chunks of information with interactive examples, promoting exploration over passive reading. This is more effective for education than a linear document. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Python's ecosystem of libraries. Goal: Compare. Viz/Presentation: Interactive Bar Chart (Chart.js). Interaction: Clicking a library's bar dynamically updates an adjacent text block with its description and use cases. Justification: Provides a quick visual comparison while linking it directly to detailed information, enhancing comprehension.
+        - Report Info: Control Flow Logic (try/except), Concurrency Choices. Goal: Explain Structure. Viz/Presentation: Diagrams built with styled HTML/CSS (Tailwind). Interaction: Hover effects to highlight parts of the diagram. Justification: Makes abstract programming concepts tangible and easier to follow than text alone.
+        - Report Info: Code examples. Goal: Inform/Practice. Viz/Presentation: Syntax-highlighted blocks with a "Copy" button. Interaction: Toggled visibility via "Show Code" buttons. Justification: Keeps the UI clean and presents code on demand.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+        .sidebar-link {
+            transition: all 0.2s ease-in-out;
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #EFEAE4;
+            color: #A0522D;
+            transform: translateX(4px);
+        }
+        .content-card {
+            background-color: #FFFFFF;
+            border: 1px solid #EFEAE4;
+            transition: box-shadow 0.3s ease;
+        }
+        .content-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .interactive-tab {
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .interactive-tab.active, .interactive-tab:hover {
+            border-bottom-color: #A0522D;
+            color: #A0522D;
+        }
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="w-64 bg-[#F7F2EC] p-6 hidden md:block flex-shrink-0">
+        <h1 class="text-2xl font-bold text-[#A0522D] mb-8">Python Pathway</h1>
+        <nav id="main-nav" class="space-y-2">
+            <!-- Navigation links will be injected here by JS -->
+        </nav>
+    </aside>
+
+    <!-- Mobile Header -->
+    <header class="md:hidden bg-[#F7F2EC] p-4 w-full fixed top-0 left-0 z-20 flex justify-between items-center shadow-md">
+        <h1 class="text-xl font-bold text-[#A0522D]">Python Pathway</h1>
+        <button id="mobile-menu-btn" class="text-gray-700 focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+        </button>
+    </header>
+
+    <!-- Mobile Sidebar -->
+    <div id="mobile-sidebar" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden">
+        <aside class="w-64 bg-[#F7F2EC] h-full p-6">
+            <div class="flex justify-between items-center mb-8">
+                 <h1 class="text-2xl font-bold text-[#A0522D]">Menu</h1>
+                 <button id="close-mobile-menu-btn" class="text-gray-700 focus:outline-none">
+                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                 </button>
+            </div>
+            <nav id="mobile-nav" class="space-y-2">
+                <!-- Mobile navigation links will be injected here -->
+            </nav>
+        </aside>
+    </div>
+
+    <!-- Main Content -->
+    <main id="main-content" class="flex-1 p-6 md:p-10 pt-20 md:pt-10">
+        <!-- Content sections will be injected here -->
+    </main>
+
+<script>
+const curriculumData = {
+    introduction: {
+        title: 'I. Introduction & Setting Up',
+        content: `
+            <div class="space-y-6">
+                <p class="text-lg leading-relaxed">This application provides a comprehensive guide to mastering Python, from foundational concepts to advanced features, API interactions, and significant external libraries. It is designed to equip a new learner with a structured path, deep explanations, and real-world applications to foster a robust understanding and practical proficiency in Python programming.</p>
+                <div class="p-6 rounded-lg bg-white border border-gray-200">
+                    <h3 class="text-xl font-semibold text-[#A0522D] mb-3">What is Python? Why Learn It?</h3>
+                    <p class="mb-4">Python is a high-level, general-purpose programming language that emphasizes code readability. Its simple, English-like syntax makes it one of the easiest languages for beginners. Python's versatility allows it to be used in web development, data science, machine learning, automation, and much more, making it an incredibly valuable skill in today's tech landscape.</p>
+                </div>
+                <div class="p-6 rounded-lg bg-white border border-gray-200">
+                    <h3 class="text-xl font-semibold text-[#A0522D] mb-3">Your First Python Program: "Hello, World!"</h3>
+                    <p class="mb-4">The "Hello, World!" program is a classic first step. It verifies that your Python environment is set up correctly and introduces you to the <code>print()</code> function, which is used to display output.</p>
+                    <div class="code-block rounded-lg p-4">
+                        <pre><code># hello_world.py\nprint("Hello, World!")</code></pre>
+                    </div>
+                </div>
+            </div>
+        `
+    },
+    fundamentals: {
+        title: 'II. Python Fundamentals',
+        subtopics: [
+            { 
+                title: 'Variables and Data Types',
+                explanation: `Variables are names that refer to values in memory. Python is dynamically typed, so you don't need to declare a variable's type. It's inferred at runtime. Key data types include numbers (int, float), strings (str), booleans (bool), lists, tuples, dictionaries, and sets.`,
+                code: `
+# Variable assignment
+user_name = "Alice"  # String
+user_age = 30        # Integer
+price = 19.99      # Float
+is_active = True     # Boolean
+
+# Collection Types
+shopping_list = ["apples", "bread", "milk"] # List (mutable)
+coordinates = (10.0, 20.5)                   # Tuple (immutable)
+user_profile = {"name": "Bob", "age": 25}    # Dictionary
+unique_tags = {"python", "code", "dev"}      # Set
+                `,
+                realWorld: `Imagine an e-commerce site. A variable 'user_name' stores the customer's name. A list 'shopping_cart' holds all the items they want to buy. A dictionary 'product_details' could store the price, description, and stock level for an item. These variables and data structures are the foundation for managing all the site's data.`
+            },
+            {
+                title: 'Operators',
+                explanation: `Operators are special symbols that perform operations on values (operands). This includes arithmetic (+, -, *), comparison (==, !=, >), logical (and, or, not), assignment (+=, -=), and more.`,
+                code: `
+# Arithmetic
+total = 10 + 5 
+
+# Comparison
+is_equal = (total == 15) # Results in True
+
+# Logical
+can_access = (user_age > 18 and is_active)
+
+# Assignment
+score = 100
+score += 10 # score is now 110
+                `,
+                realWorld: `In a video game, arithmetic operators update a player's score. Comparison operators check if the score is high enough to unlock a new level. Logical operators might check if the player has both a key 'and' is at the correct door to open it.`
+            },
+            {
+                title: 'Control Flow',
+                explanation: `Control flow structures dictate the order in which code executes. Conditionals (if/elif/else) allow for decision-making, while loops (for/while) allow for repeating code.`,
+                code: `
+# Conditional (if/elif/else)
+temperature = 25
+if temperature > 30:
+    print("It's a hot day!")
+elif temperature < 10:
+    print("It's a cold day.")
+else:
+    print("It's a pleasant day.")
+
+# Loop (for)
+for item in shopping_list:
+    print(f"Buying: {item}")
+                `,
+                realWorld: `A weather app uses conditionals to display different icons based on the temperature. A social media feed uses a 'for' loop to display each post in your timeline. An online game might use a 'while' loop to keep running as long as the player's health is greater than zero.`
+            }
+        ]
+    },
+    functions_modules: {
+        title: 'III. Functions, Modules & Packages',
+        subtopics: [
+            {
+                title: 'Functions',
+                explanation: `Functions are reusable blocks of code that perform a specific task. They help organize code, reduce repetition, and make programs more modular. Key concepts include parameters, return values, scope (LEGB rule), and lambda functions.`,
+                code: `
+# Defining a function
+def calculate_area(width, height):
+    """This function calculates the area of a rectangle."""
+    return width * height
+
+# Calling the function
+area = calculate_area(10, 5) # area will be 50
+print(f"The area is: {area}")
+
+# Lambda function (small, anonymous function)
+add = lambda x, y: x + y
+print(add(3, 4)) # Output: 7
+                `,
+                realWorld: `Think of a data processing application. You might have a function 'clean_data()' that removes duplicates and handles missing values. Another function 'analyze_data()' could calculate statistics. By creating functions, you can reuse this logic on many different datasets without rewriting the code.`
+            },
+            {
+                title: 'Modules and Packages',
+                explanation: `A module is a single Python file (.py) with functions and variables. A package is a directory of modules. They allow you to organize and reuse code across projects. 'pip' is the tool used to install third-party packages from the Python Package Index (PyPI).`,
+                code: `
+# Assuming you have a file named 'my_module.py' with a function 'greet()'
+
+# main.py
+import my_module
+
+my_module.greet("Alice")
+
+# --- Using pip to install a package ---
+# In your terminal:
+# pip install requests
+                `,
+                realWorld: `You need to download data from a website. Instead of writing all the complex networking code yourself, you can simply 'import requests', a popular third-party module designed for this exact task. This saves immense time and leverages code written and tested by experts.`
+            },
+            {
+                title: 'Error Handling',
+                explanation: `Robust programs must handle potential errors gracefully. Python uses 'try...except' blocks to manage exceptions. Code that might fail goes in the 'try' block, and the code to run if an error occurs goes in the 'except' block.`,
+                code: `
+try:
+    number = int(input("Enter a number: "))
+    result = 10 / number
+    print(f"Result is {result}")
+except ValueError:
+    print("That was not a valid number!")
+except ZeroDivisionError:
+    print("You can't divide by zero!")
+finally:
+    print("This block always executes.")
+                `,
+                realWorld: `When a user signs up on a website, the program tries to save their data to a database. What if the database is temporarily offline? A 'try...except' block can catch this connection error and show the user a friendly message like, "Sorry, we're having trouble creating your account right now. Please try again later," instead of crashing the application.`
+            }
+        ]
+    },
+    advanced: {
+        title: 'IV. Advanced Python & Ecosystem',
+        content: `
+            <div class="space-y-6">
+                <p class="text-lg leading-relaxed">Beyond the fundamentals, Python offers sophisticated features and a rich ecosystem of external libraries and frameworks that empower developers to build complex, high-performance, and specialized applications. This section explores some of the most impactful areas.</p>
+                
+                <div class="p-6 rounded-lg bg-white border border-gray-200">
+                    <h3 class="text-xl font-semibold text-[#A0522D] mb-3">Concurrency Models</h3>
+                    <p class="mb-4">Concurrency allows a program to handle multiple tasks at once. The best approach depends on the task:</p>
+                    <div class="grid md:grid-cols-2 gap-4 text-center">
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <h4 class="font-semibold">Threading & Asyncio</h4>
+                            <p class="text-5xl my-2">⏱️</p>
+                            <p>Best for <strong>I/O-Bound</strong> tasks, like waiting for network requests or file downloads. They allow the program to work on other things while waiting.</p>
+                        </div>
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <h4 class="font-semibold">Multiprocessing</h4>
+                            <p class="text-5xl my-2">⚙️</p>
+                            <p>Best for <strong>CPU-Bound</strong> tasks, like complex calculations or data processing. It uses multiple CPU cores for true parallel execution.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 rounded-lg bg-white border border-gray-200">
+                    <h3 class="text-xl font-semibold text-[#A0522D] mb-3">Interacting with APIs</h3>
+                    <p class="mb-4">APIs (Application Programming Interfaces) allow different software systems to communicate. The <code>requests</code> library is the standard for making HTTP requests to web APIs in Python.</p>
+                    <div class="code-block rounded-lg p-4">
+<pre><code>import requests
+
+# GET request to fetch data
+response = requests.get('https://api.github.com/users/python')
+
+# Check if the request was successful
+if response.status_code == 200:
+    # Parse the JSON response into a Python dictionary
+    data = response.json()
+    print(f"Python's GitHub ID: {data['id']}")
+    print(f"Followers: {data['followers']}")
+else:
+    print(f"Error: Failed to fetch data (Status: {response.status_code})")
+</code></pre>
+                    </div>
+                </div>
+                
+                <div class="p-6 rounded-lg bg-white border border-gray-200">
+                    <h3 class="text-xl font-semibold text-[#A0522D] mb-3">Major Libraries & Frameworks</h3>
+                    <p class="mb-4">Python's true power comes from its vast ecosystem. Below is a comparison of some popular libraries. Click on a bar in the chart to learn more about that library.</p>
+                    <div class="flex flex-col lg:flex-row gap-6 items-center">
+                        <div class="w-full lg:w-1/2">
+                            <div class="chart-container">
+                                <canvas id="librariesChart"></canvas>
+                            </div>
+                        </div>
+                        <div id="library-info" class="w-full lg:w-1/2 p-4 bg-gray-50 rounded-lg min-h-[300px]">
+                            <h4 id="lib-title" class="text-lg font-semibold text-gray-800">Select a library</h4>
+                            <p id="lib-desc" class="text-gray-600 mt-2">Click on a bar in the chart to see details here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `
+    }
+};
+
+const libraryDetails = {
+    'NumPy/Pandas': {
+        title: 'NumPy & Pandas - Data Science',
+        description: 'The twin pillars of data science in Python. NumPy provides powerful N-dimensional array objects for numerical computation, while Pandas offers DataFrame objects for easy data manipulation and analysis.'
+    },
+    'Matplotlib/Seaborn': {
+        title: 'Matplotlib & Seaborn - Data Visualization',
+        description: 'These libraries are used to create a wide variety of static, animated, and interactive visualizations. Matplotlib is the foundational library, while Seaborn provides a high-level interface for drawing attractive statistical graphics.'
+    },
+    'Flask/Django': {
+        title: 'Flask & Django - Web Development',
+        description: 'Two of the most popular web frameworks. Flask is a lightweight "micro-framework" that offers flexibility, while Django is a "batteries-included" framework that provides many components out-of-the-box for rapid development.'
+    },
+    'Scikit-learn': {
+        title: 'Scikit-learn - Machine Learning',
+        description: 'A simple and efficient tool for data mining and data analysis. It features various classification, regression and clustering algorithms and is designed to interoperate with NumPy and SciPy.'
+    },
+    'TensorFlow/PyTorch': {
+        title: 'TensorFlow & PyTorch - Deep Learning',
+        description: 'The leading open-source frameworks for building and training deep learning models. They provide tools for GPU-accelerated tensor computations and building complex neural networks for tasks like image recognition and natural language processing.'
+    }
+};
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const mainNav = document.getElementById('main-nav');
+    const mobileNav = document.getElementById('mobile-nav');
+    const mainContent = document.getElementById('main-content');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const closeMobileMenuBtn = document.getElementById('close-mobile-menu-btn');
+    const mobileSidebar = document.getElementById('mobile-sidebar');
+    let chartInstance = null;
+    
+    const navItems = Object.keys(curriculumData);
+
+    const createNavLinks = (container) => {
+        navItems.forEach(key => {
+            const link = document.createElement('a');
+            link.href = '#';
+            link.dataset.section = key;
+            link.textContent = curriculumData[key].title;
+            link.className = 'block py-2 px-4 rounded-md sidebar-link text-gray-700';
+            container.appendChild(link);
+        });
+    };
+    
+    createNavLinks(mainNav);
+    createNavLinks(mobileNav);
+
+    function renderContent(sectionKey) {
+        mainContent.innerHTML = '';
+        const sectionData = curriculumData[sectionKey];
+
+        const sectionContainer = document.createElement('div');
+        sectionContainer.id = sectionKey;
+        
+        const title = document.createElement('h2');
+        title.className = 'text-3xl font-bold mb-6 text-gray-800';
+        title.textContent = sectionData.title;
+        sectionContainer.appendChild(title);
+
+        if (sectionData.content) {
+            sectionContainer.innerHTML += sectionData.content;
+        } else if (sectionData.subtopics) {
+            const subtopicsGrid = document.createElement('div');
+            subtopicsGrid.className = 'space-y-4';
+
+            sectionData.subtopics.forEach(topic => {
+                const card = document.createElement('div');
+                card.className = 'content-card rounded-lg p-6';
+                card.innerHTML = `
+                    <h3 class="text-xl font-semibold text-[#A0522D] mb-3">${topic.title}</h3>
+                    <p class="text-gray-600 mb-4">${topic.explanation}</p>
+                    <div class="flex space-x-4 border-b border-gray-200 mb-4">
+                        <button class="interactive-tab py-2 px-1 active" data-tab="code">Code Example</button>
+                        <button class="interactive-tab py-2 px-1" data-tab="realWorld">Real-World Example</button>
+                    </div>
+                    <div class="tab-content">
+                        <div class="code-block rounded-lg p-4 tab-pane active" data-tab-content="code">
+                            <pre><code>${topic.code.trim()}</code></pre>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-lg tab-pane hidden" data-tab-content="realWorld">
+                            <p>${topic.realWorld}</p>
+                        </div>
+                    </div>
+                `;
+                subtopicsGrid.appendChild(card);
+            });
+            sectionContainer.appendChild(subtopicsGrid);
+        }
+        
+        mainContent.appendChild(sectionContainer);
+        
+        if (sectionKey === 'advanced') {
+            renderLibrariesChart();
+        }
+        addTabEventListeners();
+    }
+    
+    function updateActiveLink(sectionKey) {
+        document.querySelectorAll('#main-nav a, #mobile-nav a').forEach(link => {
+            link.classList.remove('active');
+            if(link.dataset.section === sectionKey) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    function handleNavClick(e) {
+        e.preventDefault();
+        const sectionKey = e.target.dataset.section;
+        if (sectionKey) {
+            renderContent(sectionKey);
+            updateActiveLink(sectionKey);
+            if(mobileSidebar.classList.contains('md:hidden') === false) {
+               mobileSidebar.classList.add('hidden');
+            }
+        }
+    }
+
+    mainNav.addEventListener('click', handleNavClick);
+    mobileNav.addEventListener('click', handleNavClick);
+
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileSidebar.classList.remove('hidden');
+    });
+
+    closeMobileMenuBtn.addEventListener('click', () => {
+        mobileSidebar.classList.add('hidden');
+    });
+    
+    mobileSidebar.addEventListener('click', (e) => {
+        if (e.target === mobileSidebar) {
+            mobileSidebar.classList.add('hidden');
+        }
+    });
+
+    function addTabEventListeners() {
+        mainContent.querySelectorAll('.content-card').forEach(card => {
+            const tabs = card.querySelectorAll('.interactive-tab');
+            const panes = card.querySelectorAll('.tab-pane');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    const targetTab = tab.dataset.tab;
+                    panes.forEach(pane => {
+                        pane.classList.add('hidden');
+                        pane.classList.remove('active');
+                        if (pane.dataset.tabContent === targetTab) {
+                            pane.classList.remove('hidden');
+                            pane.classList.add('active');
+                        }
+                    });
+                });
+            });
+        });
+    }
+
+    function renderLibrariesChart() {
+        const ctx = document.getElementById('librariesChart');
+        if (!ctx) return;
+        
+        const data = {
+            labels: Object.keys(libraryDetails),
+            datasets: [{
+                label: 'Popularity/Usage (Conceptual)',
+                data: [90, 85, 88, 92, 89],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        if(chartInstance) {
+            chartInstance.destroy();
+        }
+
+        chartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Click to learn more';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                         display: false
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const chartElement = elements[0];
+                        const index = chartElement.index;
+                        const label = data.labels[index];
+                        updateLibraryInfo(label);
+                    }
+                }
+            }
+        });
+    }
+
+    function updateLibraryInfo(libraryKey) {
+        const details = libraryDetails[libraryKey];
+        if(details) {
+            document.getElementById('lib-title').textContent = details.title;
+            document.getElementById('lib-desc').textContent = details.description;
+        }
+    }
+
+    renderContent('introduction');
+    updateActiveLink('introduction');
+});
+</script>
+
+</body>
+</html>
