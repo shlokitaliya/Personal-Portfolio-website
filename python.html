@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Python Masterclass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Serene Code -->
+    <!-- Application Structure Plan: A dashboard-style, non-linear learning portal. A sticky top navigation bar allows users to jump to major learning themes (Core Concepts, Data Structures, Advanced Python, Libraries & Frameworks, Projects & Practices), breaking the linear chapter model into logical sections. Each section uses interactive elements like tabs, copy-to-clipboard code blocks, and simple visualizations to make learning engaging. This structure was chosen to transform the dense report into an explorable, user-friendly web experience, prioritizing active learning over passive reading. -->
+    <!-- Visualization & Content Choices: The application uses a variety of interactive presentations. Fundamentals are shown in tabbed cards to manage information density. Data Structures are visualized with interactive HTML/CSS diagrams to clarify their operations. Advanced concepts like decorators and error handling are explained with process flow diagrams. A bar chart is used to illustrate a conceptual comparison. A gallery of cards showcases key libraries. These choices were made to make abstract concepts tangible and to present information in the most digestible format for a web-based learning environment. All visuals are built with HTML/CSS, Unicode, and Chart.js Canvas. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        h1, h2, h3, h4 { font-family: 'Inter', sans-serif; font-weight: 700; }
+        pre, code { font-family: 'JetBrains Mono', monospace; }
+        .nav-link { transition: all 0.2s ease-in-out; }
+        .nav-link.active { color: #2563eb; border-bottom-color: #2563eb; }
+        .nav-link:hover { color: #2563eb; }
+        .tab-button { transition: all 0.2s ease-in-out; }
+        .tab-button.active { background-color: #3b82f6; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .code-block { background-color: #1e293b; color: #e2e8f0; border-radius: 0.5rem; padding: 1rem; position: relative; overflow-x: auto; }
+        .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; background-color: #4b5563; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 0.25rem; cursor: pointer; font-size: 0.75rem; transition: background-color 0.2s; }
+        .copy-btn:hover { background-color: #6b7280; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 300px; max-height: 400px; }
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+        .flow-diagram-box { border: 2px solid #9ca3af; padding: 0.75rem; border-radius: 0.5rem; text-align: center; background-color: white; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); }
+        .flow-diagram-arrow { color: #6b7280; font-size: 1.5rem; line-height: 2rem; margin: 0 0.5rem; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-2xl font-bold text-slate-800">Interactive Python Masterclass</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#welcome" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 border-b-2 border-transparent">Home</a>
+                        <a href="#core-concepts" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 border-b-2 border-transparent">Core Concepts</a>
+                        <a href="#data-structures" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 border-b-2 border-transparent">Data Structures</a>
+                        <a href="#advanced-python" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 border-b-2 border-transparent">Advanced Python</a>
+                        <a href="#libraries" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 border-b-2 border-transparent">Libraries</a>
+                        <a href="#best-practices" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 border-b-2 border-transparent">Best Practices</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <section id="welcome" class="text-center py-16">
+            <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Your Journey to Python Mastery Starts Here.</h2>
+            <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">This interactive guide is designed to take you from a complete beginner to a confident Python developer. Forget passively reading chapters; here, you'll engage with concepts, experiment with code, and build a solid foundation. Use the navigation above to jump between topics or scroll to begin your journey.</p>
+        </section>
+
+        <div id="content-sections" class="space-y-24">
+            
+            <section id="core-concepts">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-900">1. Core Concepts: The Building Blocks</h2>
+                    <p class="mt-4 text-lg text-slate-600">Every great structure is built on a solid foundation. This section covers the absolute essentials of Python, from your first line of code to controlling your program's logic.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div id="core-concepts-tabs" class="mb-4 border-b border-gray-200">
+                        <!-- Tab buttons will be injected here -->
+                    </div>
+                    <div id="core-concepts-content">
+                        <!-- Tab content will be injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="data-structures">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-900">2. Built-in Data Structures: Organizing Information</h2>
+                    <p class="mt-4 text-lg text-slate-600">Data is at the heart of programming. Learn about Python's powerful built-in tools for storing and organizing collections of data, each with its unique strengths.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div id="data-structures-tabs" class="mb-4 border-b border-gray-200">
+                         <!-- Tab buttons will be injected here -->
+                    </div>
+                    <div id="data-structures-content">
+                        <!-- Tab content will be injected here -->
+                    </div>
+                </div>
+            </section>
+            
+            <section id="advanced-python">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-900">3. Advanced Python: Unleashing Full Potential</h2>
+                    <p class="mt-4 text-lg text-slate-600">Go beyond the basics. This section explores sophisticated features that enable robust, efficient, and elegant program design, including Object-Oriented Programming (OOP).</p>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div id="advanced-python-tabs" class="mb-4 border-b border-gray-200">
+                        <!-- Tab buttons will be injected here -->
+                    </div>
+                    <div id="advanced-python-content">
+                        <!-- Tab content will be injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="libraries">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-900">4. The Python Ecosystem: Essential Libraries</h2>
+                    <p class="mt-4 text-lg text-slate-600">Python's true power lies in its vast ecosystem of external libraries. Explore key packages for web development, data science, and system interaction.</p>
+                </div>
+                <div id="libraries-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Library cards will be injected here -->
+                </div>
+            </section>
+
+            <section id="best-practices">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-900">5. Best Practices & Project Development</h2>
+                    <p class="mt-4 text-lg text-slate-600">Writing code is one thing; writing good code is another. Learn the habits of professional developers and get ideas for projects to apply your new skills.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div id="best-practices-tabs" class="mb-4 border-b border-gray-200">
+                        <!-- Tab buttons will be injected here -->
+                    </div>
+                    <div id="best-practices-content">
+                        <!-- Tab content will be injected here -->
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = {};
+
+            sections['core-concepts'] = {
+                title: 'Core Concepts',
+                tabs: [
+                    { 
+                        id: 'variables-types', 
+                        title: 'Variables & Data Types',
+                        content: `
+                            <h3 class="text-xl font-semibold mb-2">Variables: Storing Information</h3>
+                            <p class="mb-4">Variables are containers for storing data values. Python is dynamically typed, meaning you don't need to declare the type of variable explicitly.</p>
+                            <div class="code-block">
+<pre><code>name = "Alice"         # A string
+age = 30             # An integer
+price = 19.99        # A float
+is_student = True    # A boolean</code></pre>
+                            </div>
+                            <h3 class="text-xl font-semibold mt-6 mb-2">Fundamental Data Types</h3>
+                            <p class="mb-4">Python has several built-in data types. The most common are strings for text, integers and floats for numbers, and booleans for logical True/False values.</p>
+                            <div class="chart-container my-6">
+                                <canvas id="dataTypeChart"></canvas>
+                            </div>
+                            <p class="text-sm text-center text-slate-500">Conceptual representation of data type usage in typical applications.</p>
+                        `
+                    },
+                    {
+                        id: 'operators',
+                        title: 'Operators',
+                        content: `
+                             <h3 class="text-xl font-semibold mb-2">Performing Operations</h3>
+                             <p class="mb-4">Operators are used to perform operations on variables and values. Python supports various types of operators.</p>
+                             <div class="grid md:grid-cols-2 gap-6">
+                                 <div>
+                                     <h4 class="font-semibold text-lg mb-2">Arithmetic Operators</h4>
+                                     <p class="mb-2">For mathematical calculations.</p>
+                                     <div class="code-block">
+<pre><code>x = 10
+y = 3
+print(x + y)  # 13
+print(x - y)  # 7
+print(x * y)  # 30
+print(x / y)  # 3.33...
+print(x // y) # 3 (floor division)
+print(x % y)  # 1 (modulo)
+print(x ** y) # 1000 (exponent)</code></pre>
+                                     </div>
+                                 </div>
+                                 <div>
+                                     <h4 class="font-semibold text-lg mb-2">Comparison & Logical Operators</h4>
+                                     <p class="mb-2">For comparing values and combining boolean expressions.</p>
+                                     <div class="code-block">
+<pre><code>age = 25
+has_permission = True
+# Comparison
+print(age > 18)        # True
+print(age == 25)       # True
+# Logical
+print(age > 18 and has_permission) # True
+print(age < 18 or has_permission)  # True
+print(not has_permission)          # False</code></pre>
+                                     </div>
+                                 </div>
+                             </div>
+                        `
+                    },
+                    {
+                        id: 'control-flow',
+                        title: 'Control Flow',
+                        content: `
+                            <h3 class="text-xl font-semibold mb-2">Making Decisions with if/elif/else</h3>
+                            <p class="mb-4">Conditional statements allow your program to execute different code blocks based on certain conditions.</p>
+                            <div class="code-block">
+<pre><code>score = 85
+if score >= 90:
+    grade = "A"
+elif score >= 80:
+    grade = "B"
+else:
+    grade = "C"
+print(f"Your grade is: {grade}") # Output: Your grade is: B</code></pre>
+                            </div>
+                            <h3 class="text-xl font-semibold mt-6 mb-2">Repeating Actions with Loops</h3>
+                            <p class="mb-4">Loops are used to execute a block of code repeatedly. Use a <code>for</code> loop to iterate over a sequence and a <code>while</code> loop to repeat as long as a condition is true.</p>
+                             <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-2"><code>for</code> Loop</h4>
+                                    <div class="code-block">
+<pre><code>fruits = ["apple", "banana", "cherry"]
+for fruit in fruits:
+    print(fruit)</code></pre>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-2"><code>while</code> Loop</h4>
+                                    <div class="code-block">
+<pre><code>count = 0
+while count < 3:
+    print("Looping...")
+    count += 1</code></pre>
+                                    </div>
+                                </div>
+                             </div>
+                        `
+                    },
+                    {
+                        id: 'functions',
+                        title: 'Functions',
+                        content: `
+                            <h3 class="text-xl font-semibold mb-2">Building Reusable Code Blocks</h3>
+                            <p class="mb-4">Functions are named blocks of code that perform a specific task. They help organize your code, make it reusable, and improve readability. A function is defined with <code>def</code> and can accept inputs (parameters) and return an output (return value).</p>
+                            <div class="code-block">
+<pre><code># Defining a function with parameters and a return value
+def greet(name: str) -> str:
+    """A function that returns a personalized greeting."""
+    return f"Hello, {name}!"
+
+# Calling the function
+message = greet("World")
+print(message)  # Output: Hello, World!</code></pre>
+                            </div>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Real-world Example: Simple Calculator</h4>
+                             <p class="mb-4">Functions are perfect for encapsulating logic. Here, we create functions for basic arithmetic, making the main part of our program clean and easy to read.</p>
+                            <div class="code-block">
+<pre><code>def add(a, b):
+    return a + b
+
+def subtract(a, b):
+    return a - b
+
+num1 = 20
+num2 = 5
+
+sum_result = add(num1, num2)
+difference_result = subtract(num1, num2)
+
+print(f"Sum: {sum_result}")
+print(f"Difference: {difference_result}")</code></pre>
+                            </div>
+                        `
+                    }
+                ]
+            };
+            
+            sections['data-structures'] = {
+                title: 'Data Structures',
+                tabs: [
+                    {
+                        id: 'lists',
+                        title: 'Lists',
+                        content: `
+                            <h3 class="text-xl font-semibold mb-2">Lists: Ordered, Mutable Collections</h3>
+                            <p class="mb-4">Lists are one of the most versatile data structures. They are ordered collections of items that can be of any type, and their contents can be changed (mutable).</p>
+                            <div class="code-block">
+<pre><code># A list of numbers
+primes = [2, 3, 5, 7, 11]
+
+# Accessing items by index
+print(primes[0])   # Output: 2
+print(primes[-1])  # Output: 11 (last item)
+
+# Modifying a list
+primes.append(13)    # Add an item to the end
+print(primes)      # Output: [2, 3, 5, 7, 11, 13]
+
+primes[2] = 6        # Change an item
+print(primes)      # Output: [2, 3, 6, 7, 11, 13]
+
+# Removing items
+primes.pop()         # Remove the last item
+print(primes)      # Output: [2, 3, 6, 7, 11]</code></pre>
+                            </div>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">List Comprehensions: A Pythonic Way</h4>
+                            <p class="mb-4">A concise and readable way to create lists. Compare the traditional <code>for</code> loop with a list comprehension:</p>
+                             <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-semibold text-base mb-2">Traditional For Loop</h4>
+                                    <div class="code-block">
+<pre><code>squares = []
+for x in range(5):
+    squares.append(x**2)
+# squares is [0, 1, 4, 9, 16]</code></pre>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-base mb-2">List Comprehension</h4>
+                                    <div class="code-block">
+<pre><code>squares = [x**2 for x in range(5)]
+
+# squares is [0, 1, 4, 9, 16]</code></pre>
+                                    </div>
+                                </div>
+                             </div>
+                        `
+                    },
+                    {
+                        id: 'tuples',
+                        title: 'Tuples',
+                        content: `
+                            <h3 class="text-xl font-semibold mb-2">Tuples: Ordered, Immutable Collections</h3>
+                            <p class="mb-4">Tuples are similar to lists but with one key difference: they are <strong>immutable</strong>, meaning their contents cannot be changed after creation. This makes them perfect for data that should not be altered, like coordinates or fixed records.</p>
+                            <div class="code-block">
+<pre><code># A tuple of coordinates
+point = (10, 20)
+
+# Accessing items by index
+print(point[0])   # Output: 10
+
+# Trying to change a tuple will raise a TypeError
+# point[0] = 15  # This will cause an error!
+
+# Tuples are often used to return multiple values from a function
+def get_user_info():
+    return ("Alice", 30)
+
+name, age = get_user_info() # Unpacking the tuple
+print(f"{name} is {age} years old.")</code></pre>
+                            </div>
+                            <div class="mt-4 p-4 bg-yellow-100 text-yellow-800 rounded-lg"><strong>Key Use Case:</strong> Use tuples when you want to ensure the data cannot be accidentally modified. They can also be used as keys in dictionaries because they are immutable.</div>
+                        `
+                    },
+                    {
+                        id: 'dictionaries',
+                        title: 'Dictionaries',
+                        content: `
+                            <h3 class="text-xl font-semibold mb-2">Dictionaries: Key-Value Pairs</h3>
+                            <p class="mb-4">Dictionaries store data in <strong>key-value</strong> pairs. They are unordered (in older Python versions), mutable, and indexed by a unique key. This makes them extremely fast for looking up information.</p>
+                            <div class="code-block">
+<pre><code># A dictionary of student scores
+student = {
+    "name": "Bob",
+    "score": 88,
+    "courses": ["Math", "Science"]
+}
+
+# Accessing values by key
+print(student["name"])         # Output: Bob
+print(student.get("score"))    # Output: 88 (safer way)
+
+# Adding a new key-value pair
+student["age"] = 22
+print(student)
+
+# Iterating through a dictionary
+for key, value in student.items():
+    print(f"{key}: {value}")</code></pre>
+                            </div>
+                            <div class="mt-4 p-4 bg-blue-100 text-blue-800 rounded-lg"><strong>Real-world Scenario:</strong> Dictionaries are perfect for representing structured data like JSON from a web API. Imagine fetching user data; it would likely come in a dictionary format.</div>
+                        `
+                    },
+                    {
+                        id: 'sets',
+                        title: 'Sets',
+                        content: `
+                            <h3 class="text-xl font-semibold mb-2">Sets: Unordered, Unique Collections</h3>
+                            <p class="mb-4">Sets are collections of <strong>unique</strong> items. They are unordered and mutable. Their main strengths are extremely fast membership testing (checking if an item is in the set) and performing mathematical set operations.</p>
+                            <div class="code-block">
+<pre><code># A set automatically removes duplicates
+numbers = {1, 2, 3, 2, 1, 4}
+print(numbers) # Output: {1, 2, 3, 4}
+
+# Checking for membership is very fast
+print(3 in numbers) # Output: True
+
+# Set operations
+set_a = {1, 2, 3}
+set_b = {3, 4, 5}
+
+print(set_a | set_b) # Union: {1, 2, 3, 4, 5}
+print(set_a & set_b) # Intersection: {3}
+print(set_a - set_b) # Difference: {1, 2}</code></pre>
+                            </div>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Performance: List vs. Set</h4>
+                            <p class="mb-4">For checking if an item exists in a large collection (membership testing), sets are significantly faster than lists. This chart illustrates the conceptual difference in performance scaling.</p>
+                            <div class="chart-container my-6">
+                                <canvas id="performanceChart"></canvas>
+                            </div>
+                        `
+                    }
+                ]
+            };
+
+            sections['advanced-python'] = {
+                title: 'Advanced Python',
+                tabs: [
+                    {
+                        id: 'oop',
+                        title: 'OOP',
+                        content: `
+                            <h3 class="text-xl font-semibold mb-2">Object-Oriented Programming (OOP)</h3>
+                            <p class="mb-4">OOP is a programming paradigm based on the concept of "objects", which can contain data (attributes) and code (methods). Python is an object-oriented language. A <strong>class</strong> is a blueprint for creating objects.</p>
+                            <div class="code-block">
+<pre><code>class Dog:
+    # Class attribute
+    species = "Canis familiaris"
+
+    # Initializer / Instance attributes
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    # Instance method
+    def bark(self):
+        return "Woof!"
+
+# Create instances (objects) of the Dog class
+my_dog = Dog("Buddy", 5)
+your_dog = Dog("Lucy", 3)
+
+print(f"{my_dog.name} is a {my_dog.species}.")
+print(f"He says: {my_dog.bark()}")</code></pre>
+                            </div>
+                        `
+                    },
+                    {
+                        id: 'error-handling',
+                        title: 'Error Handling',
+                        content: `
+                            <h3 class="text-xl font-semibold mb-2">Gracefully Handling Errors</h3>
+                            <p class="mb-4">Robust programs must anticipate and handle errors. Python uses <code>try...except</code> blocks to manage exceptions, preventing your program from crashing.</p>
+                             <div class="p-4 bg-slate-100 rounded-lg">
+                                <h4 class="font-semibold text-center mb-4">The Flow of Error Handling</h4>
+                                <div class="flex items-center justify-center flex-wrap">
+                                    <div class="flow-diagram-box bg-blue-100 border-blue-300"><code>try</code> Block<br/><span class="text-sm font-normal">Code that might fail</span></div>
+                                    <div class="flow-diagram-arrow">➔</div>
+                                    <div class="flex flex-col items-center">
+                                       <span class="text-sm text-green-600 font-medium">Success</span> 
+                                       <div class="flow-diagram-arrow -rotate-90">➔</div>
+                                    </div>
+                                    <div class="flow-diagram-box bg-green-100 border-green-300"><code>else</code> Block<br/><span class="text-sm font-normal">Runs if no error</span></div>
+                                    <div class="flex flex-col items-center ml-4">
+                                       <span class="text-sm text-red-600 font-medium">Error Occurs</span> 
+                                       <div class="flow-diagram-arrow rotate-90">➔</div>
+                                    </div>
+                                    <div class="flow-diagram-box bg-red-100 border-red-300"><code>except</code> Block<br/><span class="text-sm font-normal">Catches the error</span></div>
+                                    <div class="flow-diagram-arrow">➔</div>
+                                    <div class="flow-diagram-box bg-gray-200 border-gray-400"><code>finally</code> Block<br/><span class="text-sm font-normal">Runs no matter what</span></div>
+                                </div>
+                            </div>
+                            <div class="code-block mt-4">
+<pre><code>try:
+    numerator = 10
+    denominator = int(input("Enter a number to divide by: "))
+    result = numerator / denominator
+except ZeroDivisionError:
+    print("Error: Cannot divide by zero.")
+except ValueError:
+    print("Error: Please enter a valid number.")
+else:
+    print(f"The result is {result}.")
+finally:
+    print("Execution finished.")</code></pre>
+                            </div>
+                        `
+                    },
+                    {
+                        id: 'decorators',
+                        title: 'Decorators',
+                        content: `
+                            <h3 class="text-xl font-semibold mb-2">Enhancing Functions with Decorators</h3>
+                            <p class="mb-4">A decorator is a function that takes another function as input, adds some functionality, and returns a new function. It's a way to modify or extend behavior without changing the original function's code. They are heavily used in web frameworks like Flask and Django.</p>
+                            <div class="code-block">
+<pre><code># A simple decorator to time a function
+import time
+
+def timer_decorator(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"{func.__name__} took {end_time - start_time:.4f} seconds to run.")
+        return result
+    return wrapper
+
+@timer_decorator
+def slow_function():
+    time.sleep(1)
+    print("Function finished.")
+
+slow_function()</code></pre>
+                            </div>
+                        `
+                    },
+                    {
+                        id: 'generators',
+                        title: 'Generators',
+                        content: `
+                            <h3 class="text-xl font-semibold mb-2">Memory-Efficient Iteration with Generators</h3>
+                            <p class="mb-4">Generators are a special type of function that allow you to create iterators in a simple way. They "yield" values one at a time, rather than creating an entire list in memory. This is incredibly memory-efficient for working with large datasets or infinite sequences.</p>
+                             <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-2">Standard Function (Memory Intensive)</h4>
+                                    <div class="code-block">
+<pre><code>def get_large_list():
+    # Creates a huge list in memory
+    return [i for i in range(1000000)]
+
+# numbers = get_large_list() # This could use a lot of RAM!</code></pre>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-2">Generator Function (Memory Efficient)</h4>
+                                    <div class="code-block">
+<pre><code>def get_large_numbers_gen():
+    # Yields one number at a time
+    num = 0
+    while num < 1000000:
+        yield num
+        num += 1
+
+# No large list is created in memory
+for number in get_large_numbers_gen():
+    if number % 100000 == 0:
+        print(number)</code></pre>
+                                    </div>
+                                </div>
+                             </div>
+                        `
+                    }
+                ]
+            };
+
+            const librariesData = [
+                { 
+                    name: 'Requests', 
+                    description: 'The de facto standard for making HTTP requests in Python. It simplifies web interaction, making it easy to fetch data from APIs.',
+                    code: 'import requests\n\nresponse = requests.get("https://api.github.com")\nprint(response.status_code)',
+                    category: 'Web'
+                },
+                { 
+                    name: 'Flask', 
+                    description: 'A lightweight and flexible "microframework" for web development. Perfect for building small websites and APIs quickly.',
+                    code: 'from flask import Flask\n\napp = Flask(__name__)\n\n@app.route("/")\ndef hello():\n    return "Hello, Flask!"',
+                    category: 'Web'
+                },
+                { 
+                    name: 'Django', 
+                    description: 'A "batteries-included" high-level web framework for rapid development of secure and maintainable websites. Great for large, complex projects.',
+                    code: '# A Django view\nfrom django.http import HttpResponse\n\ndef index(request):\n    return HttpResponse("Hello, Django.")',
+                    category: 'Web'
+                },
+                { 
+                    name: 'NumPy', 
+                    description: 'The fundamental package for scientific computing. It provides powerful N-dimensional array objects and mathematical functions.',
+                    code: 'import numpy as np\n\na = np.array([1, 2, 3])\nprint(a * 2) # [2 4 6]',
+                    category: 'Data Science'
+                },
+                { 
+                    name: 'Pandas', 
+                    description: 'A powerful library for data manipulation and analysis. It introduces the DataFrame, a 2D labeled data structure like a spreadsheet.',
+                    code: 'import pandas as pd\n\ndata = {\'Name\': [\'Tom\', \'Nick\'], \'Age\': [20, 21]}\ndf = pd.DataFrame(data)\nprint(df)',
+                    category: 'Data Science'
+                },
+                { 
+                    name: 'Matplotlib', 
+                    description: 'A comprehensive library for creating static, animated, and interactive visualizations in Python. The go-to for plotting.',
+                    code: 'import matplotlib.pyplot as plt\n\nplt.plot([1, 2, 3], [4, 1, 7])\nplt.show()',
+                    category: 'Data Science'
+                },
+                 { 
+                    name: 'Scikit-learn', 
+                    description: 'A simple and efficient tool for predictive data analysis and machine learning, offering algorithms for classification, regression, and clustering.',
+                    code: 'from sklearn.linear_model import LinearRegression\n\n# model = LinearRegression()\n# model.fit(X_train, y_train)',
+                    category: 'Data Science'
+                },
+                { 
+                    name: 'OS & Subprocess', 
+                    description: 'Built-in modules for interacting with the operating system, allowing you to work with files, directories, and run external commands.',
+                    code: 'import os\n\n# List files in current directory\nprint(os.listdir("."))',
+                    category: 'System'
+                },
+            ];
+
+            const librariesGrid = document.getElementById('libraries-grid');
+            librariesData.forEach(lib => {
+                const card = document.createElement('div');
+                card.className = 'bg-white p-6 rounded-lg shadow-lg flex flex-col';
+                card.innerHTML = `
+                    <h3 class="text-xl font-semibold mb-2">${lib.name}</h3>
+                    <p class="text-slate-600 mb-4 flex-grow">${lib.description}</p>
+                    <div class="code-block text-sm mt-auto">
+                        <pre><code>${lib.code}</code></pre>
+                    </div>
+                `;
+                librariesGrid.appendChild(card);
+            });
+            
+             sections['best-practices'] = {
+                title: 'Best Practices',
+                tabs: [
+                    {
+                        id: 'clean-code',
+                        title: 'Clean Code',
+                        content: `
+                            <h3 class="text-xl font-semibold mb-2">Writing Clean and Maintainable Code</h3>
+                            <p class="mb-4">Good code is not just about being correct; it's about being readable and maintainable. Following best practices makes your code easier for others (and your future self) to understand.</p>
+                            <ul class="list-disc list-inside space-y-2 text-slate-700">
+                                <li><strong>Follow PEP 8:</strong> Python's official style guide. Use consistent indentation (4 spaces), naming conventions (<code>snake_case</code> for functions, <code>CamelCase</code> for classes), and line length.</li>
+                                <li><strong>Be Explicit:</strong> Write code that is clear and easy to understand. Avoid overly clever one-liners if a more straightforward approach is more readable.</li>
+                                <li><strong>DRY Principle (Don't Repeat Yourself):</strong> If you find yourself writing the same code in multiple places, turn it into a reusable function.</li>
+                                <li><strong>Use Virtual Environments:</strong> Always isolate project dependencies to avoid conflicts between projects.</li>
+                                <li><strong>Comment Wisely:</strong> Write comments to explain the *why*, not the *what*. Good code should be self-explanatory about what it does.</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        id: 'testing',
+                        title: 'Testing & Debugging',
+                        content: `
+                            <h3 class="text-xl font-semibold mb-2">Ensuring Code Quality</h3>
+                            <p class="mb-4">Testing and debugging are crucial skills for writing reliable software. Testing verifies your code works as expected, while debugging helps you find and fix errors when it doesn't.</p>
+                            <h4 class="font-semibold text-lg mb-2">The AAA Pattern for Unit Tests</h4>
+                            <p class="mb-4">A common structure for writing tests is Arrange, Act, Assert.</p>
+                             <div class="p-4 bg-slate-100 rounded-lg">
+                                <div class="flex items-center justify-around flex-wrap">
+                                    <div class="text-center p-2">
+                                        <div class="text-2xl font-bold text-blue-600">1. Arrange</div>
+                                        <p>Set up inputs and expected results.</p>
+                                    </div>
+                                     <div class="flow-diagram-arrow hidden md:block">➔</div>
+                                    <div class="text-center p-2">
+                                        <div class="text-2xl font-bold text-blue-600">2. Act</div>
+                                        <p>Execute the code being tested.</p>
+                                    </div>
+                                     <div class="flow-diagram-arrow hidden md:block">➔</div>
+                                    <div class="text-center p-2">
+                                        <div class="text-2xl font-bold text-blue-600">3. Assert</div>
+                                        <p>Compare the actual output to the expected output.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="code-block mt-4">
+<pre><code>import unittest
+
+def add(a, b):
+    return a + b
+
+class MyTest(unittest.TestCase):
+    def test_add(self):
+        # 1. Arrange
+        expected = 5
+        # 2. Act
+        result = add(2, 3)
+        # 3. Assert
+        self.assertEqual(result, expected)</code></pre>
+                            </div>
+                        `
+                    },
+                    {
+                        id: 'projects',
+                        title: 'Project Ideas',
+                        content: `
+                            <h3 class="text-xl font-semibold mb-2">Applying Your Knowledge</h3>
+                            <p class="mb-4">The best way to learn is by doing. Building projects solidifies your understanding and gives you practical experience. Start small and work your way up!</p>
+                             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                                    <h4 class="font-semibold text-lg text-blue-800 mb-2">Beginner Projects</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-blue-700">
+                                        <li>Simple Calculator</li>
+                                        <li>Number Guessing Game</li>
+                                        <li>Text-based Adventure Game</li>
+                                        <li>To-Do List Application</li>
+                                    </ul>
+                                </div>
+                               <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                                    <h4 class="font-semibold text-lg text-green-800 mb-2">Intermediate Projects</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-green-700">
+                                        <li>Web Scraper (with Requests)</li>
+                                        <li>Simple Blog (with Flask)</li>
+                                        <li>Weather App (using an API)</li>
+                                        <li>File Organizer Script</li>
+                                    </ul>
+                                </div>
+                               <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                                    <h4 class="font-semibold text-lg text-purple-800 mb-2">Advanced Projects</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-purple-700">
+                                        <li>Data Analysis Dashboard (with Pandas & Matplotlib)</li>
+                                        <li>Full-featured Web App (with Django)</li>
+                                        <li>Machine Learning Model (with Scikit-learn)</li>
+                                        <li>Automation Bot (e.g., for social media)</li>
+                                    </ul>
+                                </div>
+                             </div>
+                        `
+                    }
+                ]
+            };
+
+            function setupTabs(sectionId) {
+                const section = sections[sectionId];
+                if (!section) return;
+
+                const tabsContainer = document.getElementById(`${sectionId}-tabs`);
+                const contentContainer = document.getElementById(`${sectionId}-content`);
+
+                tabsContainer.innerHTML = section.tabs.map(tab => `
+                    <button class="tab-button text-sm md:text-base px-4 py-2 font-medium text-slate-500 hover:bg-slate-100 rounded-t-lg" data-tab="${sectionId}-${tab.id}">
+                        ${tab.title}
+                    </button>
+                `).join('');
+
+                contentContainer.innerHTML = section.tabs.map(tab => `
+                    <div id="${sectionId}-${tab.id}" class="tab-content p-4 border border-t-0 rounded-b-lg border-gray-200">
+                        ${tab.content}
+                    </div>
+                `).join('');
+
+                const tabButtons = tabsContainer.querySelectorAll('.tab-button');
+                const tabContents = contentContainer.querySelectorAll('.tab-content');
+
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        tabButtons.forEach(btn => btn.classList.remove('active', 'bg-blue-500', 'text-white'));
+                        button.classList.add('active', 'bg-blue-500', 'text-white');
+
+                        tabContents.forEach(content => content.classList.remove('active'));
+                        document.getElementById(button.dataset.tab).classList.add('active');
+                    });
+                });
+
+                if (tabButtons.length > 0) {
+                    tabButtons[0].click();
+                }
+            }
+
+            Object.keys(sections).forEach(setupTabs);
+            
+            function setupCharts() {
+                const dataTypeCtx = document.getElementById('dataTypeChart')?.getContext('2d');
+                if (dataTypeCtx) {
+                    new Chart(dataTypeCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Strings (Text)', 'Integers & Floats (Numbers)', 'Booleans (Logic)', 'Data Structures (Lists, Dicts, etc.)'],
+                            datasets: [{
+                                label: 'Common Data Type Usage',
+                                data: [40, 30, 10, 20],
+                                backgroundColor: ['#60a5fa', '#34d399', '#f87171', '#fbbf24'],
+                                borderColor: '#f8fafc',
+                                borderWidth: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { position: 'bottom' } }
+                        }
+                    });
+                }
+
+                const performanceCtx = document.getElementById('performanceChart')?.getContext('2d');
+                if (performanceCtx) {
+                    new Chart(performanceCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['10', '100', '1,000', '10,000', '100,000', '1,000,000'],
+                            datasets: [{
+                                label: 'Set Membership Test (Conceptual)',
+                                data: [1, 1.1, 1.2, 1.3, 1.4, 1.5],
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                tension: 0.1,
+                                fill: true
+                            }, {
+                                label: 'List Membership Test (Conceptual)',
+                                data: [1, 10, 100, 1000, 10000, 100000],
+                                borderColor: '#ef4444',
+                                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                tension: 0.1,
+                                fill: true
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: { y: { type: 'logarithmic', title: { display: true, text: 'Time (Conceptual)' } }, x: { title: { display: true, text: 'Number of Elements' } } },
+                            plugins: { tooltip: { mode: 'index', intersect: false } }
+                        }
+                    });
+                }
+            }
+
+            setupCharts();
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        document.querySelectorAll('.nav-link').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { rootMargin: '-50% 0px -50% 0px' });
+
+            document.querySelectorAll('#content-sections section').forEach(section => {
+                observer.observe(section);
+            });
+            
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            document.body.addEventListener('click', function(event) {
+                if (event.target.classList.contains('copy-btn')) {
+                    const pre = event.target.closest('.code-block').querySelector('pre');
+                    const text = pre.innerText;
+                    
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        event.target.textContent = 'Copied!';
+                        setTimeout(() => { event.target.textContent = 'Copy'; }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                    }
+                    document.body.removeChild(textArea);
+                }
+            });
+
+            document.querySelectorAll('.code-block').forEach(block => {
+                const btn = document.createElement('button');
+                btn.className = 'copy-btn';
+                btn.textContent = 'Copy';
+                block.appendChild(btn);
+            });
+        });
+    </script>
+</body>
+</html>
